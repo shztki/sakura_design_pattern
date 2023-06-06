@@ -1,0 +1,10 @@
+- name: Setup DB Server
+  hosts: db
+  become: yes
+  vars_files:
+  - conf_db.yml
+
+  roles:
+  - packages
+  - mariadb
+

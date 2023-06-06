@@ -1,0 +1,6 @@
+[web]
+GlobalIPAddress interpreter_python=/usr/bin/python3 ansible_user=sakura-user ansible_ssh_private_key_file=..//.ssh/sshkey ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[db]
+192.168.2.50 interpreter_python=/usr/bin/python3 ansible_user=sakura-user ansible_ssh_private_key_file=..//.ssh/sshkey ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o IdentityFile=..//.ssh/sshkey sakura-user@GlobalIPAddress"'
+

@@ -1,0 +1,2 @@
+[wsl_ubuntu_22]
+localhost ansible_connection=local

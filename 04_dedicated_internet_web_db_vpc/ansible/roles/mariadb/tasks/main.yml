@@ -1,0 +1,33 @@
+- name: Start mariadb Service
+  systemd:
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: Create user for myapp db
+  mysql_user:
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+    name: "{{ mariadb.user }}"
+    password: "{{ mariadb.password }}"
+    host: '{{ mariadb.user_host }}'
+    priv: '{{ mariadb.priv }}'
+    login_user: "{{ mariadb.superuser_id }}"
+    login_password: "{{ mariadb.superuser_pass}}"
+    login_host: "{{ mariadb.host }}"
+    login_port: "{{ mariadb.port }}"
+    state: present
+    check_implicit_admin: true
+
+- name: Create myapp database
+  mysql_db:
+    login_unix_socket: "/var/lib/mysql/mysql.sock"
+    name: "{{ mariadb.database }}"
+    login_user: "{{ mariadb.superuser_id }}"
+    login_password: "{{ mariadb.superuser_pass }}"
+    login_host: "{{ mariadb.host }}"
+    login_port: "{{ mariadb.port }}"
+    encoding: "{{ mariadb.encoding }}"
+    collation: "{{ mariadb.collation }}"
+    state: present
+    check_implicit_admin: true
+

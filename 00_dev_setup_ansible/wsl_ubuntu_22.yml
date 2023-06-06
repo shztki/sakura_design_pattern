@@ -1,0 +1,9 @@
+- name: WSL Ubuntu 22 setup
+  hosts: wsl_ubuntu_22
+  become: yes
+  vars_files:
+    - conf_ubuntu_22.yml
+  roles:
+    - common
+    - tools
+

@@ -1,0 +1,40 @@
+- name: apt update
+  apt:
+    update_cache: yes
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+    allow_unauthenticated: yes
+    autoremove: yes
+
+- name: Add an Apt signing key
+  apt_key:
+    url: "{{ item.name }}"
+    keyring: "{{ item.groups }}"
+    state: present
+  loop:
+    - { name: 'https://apt.releases.hashicorp.com/gpg', groups: '/usr/share/keyrings/hashicorp-archive-keyring.gpg' }
+
+- name: Add Ubuntu repository to source list
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main
+
+- name: Install Packages
+  apt:
+    name: "{{ apt.packages }}"
+    state: present
+    allow_unauthenticated: yes
+    update_cache: yes
+
+- name: Remove useless packages from the cache
+  apt:
+    autoclean: yes
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+

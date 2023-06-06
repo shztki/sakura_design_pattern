@@ -1,0 +1,13 @@
+- name: Upgrade All Packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Clean Metadatas
+  shell: dnf clean metadata
+
+- name: Install All Listed Packages
+  dnf:
+    name: "{{ dnf.packages }}"
+    state: latest
+

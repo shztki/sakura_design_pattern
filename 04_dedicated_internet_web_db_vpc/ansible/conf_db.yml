@@ -1,0 +1,18 @@
+dnf:
+  packages:
+    - mariadb-server
+    - python3-PyMySQL
+
+mariadb:
+  port: 3306
+  host: localhost
+  superuser_id: root
+  superuser_pass: 
+  user: sakura-user
+  user_host: '%'
+  priv: '*.*:ALL'
+  password: "{{ lookup('env', 'TF_VAR_default_password') }}"
+  database: sakura-db
+  encoding: utf8mb4
+  collation: utf8mb4_general_ci
+

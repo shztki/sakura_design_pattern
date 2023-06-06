@@ -1,0 +1,6 @@
+.ssh/
+*.git
+*.terraform*
+*.tfstate*
+*.envrc
+*.swp

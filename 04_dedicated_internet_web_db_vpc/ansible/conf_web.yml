@@ -1,0 +1,5 @@
+dnf:
+  packages:
+    - httpd
+    - mariadb
+

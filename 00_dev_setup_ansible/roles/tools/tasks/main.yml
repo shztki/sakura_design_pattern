@@ -1,0 +1,93 @@
+- name: Check awscli
+  command: "which aws"
+  register: check_awscli_result
+  ignore_errors: true
+  changed_when: false
+
+- name: Download awscliv2 installer
+  unarchive:
+    remote_src: yes
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: "/tmp"
+    creates: /tmp/aws
+    mode: 0755
+  
+- name: Run awscliv2 installer
+  command:
+  args:
+    cmd: "/tmp/aws/install -i /usr/local/aws-cli -b /usr/local/bin"
+  become: true
+  when: check_awscli_result is failed
+
+- name: Update awscliv2 installer
+  command:
+  args:
+    cmd: "/tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update"
+  become: true
+  when: check_awscli_result is succeeded
+
+- name: Clean awscliv2
+  file:
+    state: absent
+    path: "/tmp/aws/"
+
+- name: Check usacloud
+  command: "which usacloud"
+  register: check_usacloud_result
+  ignore_errors: true
+  changed_when: false
+
+- name: usacloud installation
+  shell: "curl -fsSL https://github.com/sacloud/usacloud/releases/latest/download/install.sh | bash"
+  become: true
+  when: check_usacloud_result is failed
+
+- name: Update usacloud
+  command:
+  args:
+    cmd: "usacloud update-self"
+  become: true
+  when: check_usacloud_result is succeeded
+
+- name: set bashrc
+  become: false
+  blockinfile:
+    path: ~/.bashrc
+    insertafter: EOF
+    block: |
+      if [ -f ~/.venv/latest/bin/activate ]; then
+        source ~/.venv/latest/bin/activate
+      fi
+      if command -v usacloud 1>/dev/null 2>&1; then
+        source <(usacloud completion bash)
+      fi
+      if command -v aws_completer 1>/dev/null 2>&1; then
+        complete -C '`which aws_completer`' aws
+      fi
+      if command -v direnv 1>/dev/null 2>&1; then
+        eval "$(direnv hook bash)"
+      fi
+
+- name: set direnvrc
+  become: false
+  blockinfile:
+    path: ~/.direnvrc
+    create: true
+    insertafter: EOF
+    block: |
+      aws_profile(){
+        export AWS_PROFILE=$1
+        export AWS_DEFAULT_REGION=`aws configure get region`
+      }
+     
+      sakuracloud_profile(){
+        export SAKURACLOUD_PROFILE=$1
+        export SAKURACLOUD_ACCESS_TOKEN=`usacloud config show $1 |jq -r '.AccessToken'`
+        export SAKURACLOUD_ACCESS_TOKEN_SECRET=`usacloud config show $1 |jq -r '.AccessTokenSecret'`
+        export SAKURACLOUD_ZONE=`usacloud config show $1 |jq -r '.Zone'`
+      }
+
+      terraform_sakuracloud_variables_set() {
+        export TF_VAR_default_password=`pass terraform/sakuracloud/default_password`
+      }
+
