@@ -1,6 +1,6 @@
 resource "sakuracloud_server" "server01" {
   count            = var.server01["count"]
-  zone             = var.zones[count.index % 2]
+  zone             = var.default_zone
   name             = format("%s-%s%03d", module.label.id, var.server01["name"], count.index + 1)
   disks            = [element(sakuracloud_disk.disk01.*.id, count.index)]
   core             = var.server01["core"]
