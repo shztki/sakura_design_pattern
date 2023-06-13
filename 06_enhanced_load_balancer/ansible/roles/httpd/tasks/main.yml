@@ -1,0 +1,39 @@
+- name: hostname
+  command: hostname
+  register: command_output
+
+- name: Create index.html
+  copy:
+    dest: "/var/www/html/index.html"
+    content: |
+      {{command_output.stdout}}
+
+- name: Rename Default Apache configuration
+  shell: mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.default
+  args:
+    creates: /etc/httpd/conf/httpd.conf.default
+  register: move_apacheconf
+  ignore_errors: True
+
+- name: Replace Apache configuration
+  template:
+    src: files/httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: replace_httpdconf
+  when: move_apacheconf is success
+
+- name: Restart httpd Service
+  service:
+    name: httpd
+    state: restarted
+  when: replace_httpdconf is success
+
+- name: Start httpd Service
+  systemd:
+    name: httpd
+    state: started
+    enabled: true
+

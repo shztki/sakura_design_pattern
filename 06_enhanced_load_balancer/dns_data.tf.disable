@@ -1,0 +1,15 @@
+# DNSゾーン参照
+data "sakuracloud_dns" "dns" {
+  filter {
+    names = [var.my_domain]
+  }
+}
+
+resource "sakuracloud_dns_record" "record_elb01" {
+  dns_id = data.sakuracloud_dns.dns.id
+  name   = var.elb01["name"]
+  type   = "ALIAS" # "CNAME"
+  ttl    = 60
+  value  = format("%s.", sakuracloud_proxylb.elb01.fqdn)
+  #value = sakuracloud_proxylb.elb01.vip
+}

@@ -1,0 +1,10 @@
+- name: Setup WEB Server
+  hosts: web
+  become: yes
+  vars_files:
+  - conf_web.yml
+
+  roles:
+  - packages
+  - httpd
+
