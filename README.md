@@ -143,8 +143,39 @@ $ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://sec
 https://manual.sakura.ad.jp/cloud/objectstorage/about.html#id8  
 途中、アクセスキーが表示されますが、これは最上位権限のものとして控えておくのみとし、実際に利用するのは以下で作成するパーミッションにしましょう。  
 https://manual.sakura.ad.jp/cloud/objectstorage/about.html#objectstrage-about-permission  
-ただし、パーミッションで作成したアクセスキーは、指定したバケットに対する操作のみが行えるアクセスキーですので、バケット一覧を取得するといったことはできないので、バケットが無い状態では CLI の動作確認もできません。(かつバケット作成すると課金されてしまいます)  
-そのため、試しづらいところですが、バケットを作成し、それを操作するパーミッション作成時の AWS CLI への登録と、その後のコマンド実行は以下のようになります。  
+なお、同様の操作を API にて実行することも可能です。  
+https://manual.sakura.ad.jp/cloud/objectstorage/api/api-json.html  
+ちょっとわかりづらいですが、バケット作成まではさくらのクラウドの API 側で実施し、バケットに対する操作は別途 S3互換API を使う形になります。  
+```
+# バケット作成
+$ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://secure.sakura.ad.jp/cloud/zone/is1a/api/objectstorage/1.0/fed/v1/buckets/バケット名 \
+     -X PUT \
+     -d '{"cluster_id": "isk01"}' | jq
+
+# バケット削除
+$ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://secure.sakura.ad.jp/cloud/zone/is1a/api/objectstorage/1.0/fed/v1/buckets/バケット名 \
+     -X DELETE \
+     -d '{"cluster_id": "isk01"}'
+
+# パーミッション作成
+$ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://secure.sakura.ad.jp/cloud/zone/is1a/api/objectstorage/1.0/isk01/v2/permissions \
+     -X POST \
+     -d '{"display_name": "パーミッション名", "bucket_controls": [{"bucket_name": "バケット名", "can_read": true, "can_write": true}]}' | jq
+
+# パーミッション削除
+$ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://secure.sakura.ad.jp/cloud/zone/is1a/api/objectstorage/1.0/isk01/v2/permissions/パーミッションID \
+     -X DELETE
+
+# パーミッションアクセスキー作成
+$ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://secure.sakura.ad.jp/cloud/zone/is1a/api/objectstorage/1.0/isk01/v2/permissions/パーミッションID/keys \
+     -X POST | jq
+
+# パーミッションアクセスキー削除
+$ curl -u $SAKURACLOUD_ACCESS_TOKEN:$SAKURACLOUD_ACCESS_TOKEN_SECRET https://secure.sakura.ad.jp/cloud/zone/is1a/api/objectstorage/1.0/isk01/v2/permissions/パーミッションID/keys/パーミッションアクセスキーID \
+     -X DELETE
+```
+
+AWS CLI へ登録するのは、パーミッションアクセスキー(とそのシークレット)となりますので、コマンド実行は以下のようになります。  
 (環境変数に自動的にセットするようにすることで、プロファイル名の指定は省略できますが、エンドポイントURL は毎回コマンド実行時に指定する必要があります)  
 ```
 $ aws configure --profile プロファイル名
