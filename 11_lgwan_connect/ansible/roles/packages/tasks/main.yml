@@ -1,0 +1,13 @@
+- name: Upgrade All Packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Clean Metadatas
+  shell: dnf clean metadata
+
+- name: Install All Listed Packages
+  dnf:
+    name: "{{ packages.list }}"
+    state: latest
+  when: inventory_hostname in ((groups['internet_segment'] + groups['gateway_segment']) | unique )

@@ -1,0 +1,29 @@
+- name: Rename Default configuration
+  shell: mv /etc/resolv.conf /etc/resolv.conf.default
+  args:
+    creates: /etc/resolv.conf.default
+  register: move_resolvconf
+  ignore_errors: True
+
+- name: Replace configuration
+  template:
+    src: files/{{ resolv.file }}
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: replace_resolvconf
+  when: move_resolvconf is success
+
+#- name: Restart Service
+#  service:
+#    name: httpd
+#    state: restarted
+#  when: replace_httpdconf is success
+#
+#- name: Start Service
+#  systemd:
+#    name: httpd
+#    state: started
+#    enabled: true
+

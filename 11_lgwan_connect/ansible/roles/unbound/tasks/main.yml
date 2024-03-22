@@ -1,0 +1,29 @@
+- name: Rename Default configuration
+  shell: mv /etc/unbound/unbound.conf /etc/unbound/unbound.conf.default
+  args:
+    creates: /etc/unbound/unbound.conf.default
+  register: move_unboundconf
+  ignore_errors: True
+
+- name: Replace configuration
+  template:
+    src: files/{{ unbound.file }}
+    dest: /etc/unbound/unbound.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: replace_unboundconf
+  when: move_unboundconf is success
+
+- name: Restart Service
+  service:
+    name: unbound
+    state: restarted
+  when: replace_unboundconf is success
+
+- name: Start Service
+  systemd:
+    name: unbound
+    state: started
+    enabled: true
+

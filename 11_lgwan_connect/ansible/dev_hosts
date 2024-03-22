@@ -1,0 +1,9 @@
+[internet_segment]
+internet ansible_user=sakura-user ansible_ssh_private_key_file=..//.ssh/sshkey ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[gateway_segment]
+gateway ansible_user=sakura-user ansible_ssh_private_key_file=..//.ssh/sshkey ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[lgwan_segment]
+lgwan ansible_user=sakura-user ansible_ssh_private_key_file=..//.ssh/sshkey ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+

@@ -1,0 +1,29 @@
+- name: Rename Default configuration
+  shell: mv /etc/dnf/dnf.conf /etc/dnf/dnf.conf.default
+  args:
+    creates: /etc/dnf/dnf.conf.default
+  register: move_dnfconf
+  ignore_errors: True
+
+- name: Replace configuration
+  template:
+    src: files/{{ dnf.file }}
+    dest: /etc/dnf/dnf.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: replace_dnfconf
+  when: move_dnfconf is success
+
+#- name: Restart Service
+#  service:
+#    name: httpd
+#    state: restarted
+#  when: replace_httpdconf is success
+#
+#- name: Start Service
+#  systemd:
+#    name: httpd
+#    state: started
+#    enabled: true
+

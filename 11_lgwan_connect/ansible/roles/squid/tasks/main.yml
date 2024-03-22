@@ -1,0 +1,38 @@
+- name: Rename Default configuration
+  shell: mv /etc/squid/squid.conf /etc/squid/squid.conf.default
+  args:
+    creates: /etc/squid/squid.conf.default
+  register: move_squidconf
+  ignore_errors: True
+
+- name: Replace configuration
+  template:
+    src: files/{{ squid.file }}
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: root
+    mode: 0644
+  register: replace_squidconf
+  when: move_squidconf is success
+
+- name: Add Whitelist
+  template:
+    src: files/{{ squid.whitelist }}
+    dest: /etc/squid/whitelist
+    owner: root
+    group: root
+    mode: 0644
+  when: inventory_hostname in groups["internet_segment"]
+
+- name: Restart Service
+  service:
+    name: squid
+    state: restarted
+  when: replace_squidconf is success
+
+- name: Start Service
+  systemd:
+    name: squid
+    state: started
+    enabled: true
+

@@ -1,0 +1,12 @@
+packages:
+  list:
+    - unbound
+    - squid
+
+unbound:
+  file: internet_unbound.conf.j2
+
+squid:
+  file: internet_squid.conf.j2
+  whitelist: whitelist.j2
+

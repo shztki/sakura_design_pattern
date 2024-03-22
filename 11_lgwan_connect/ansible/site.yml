@@ -1,0 +1,35 @@
+- name: internet_segment
+  hosts: internet
+  become: yes
+  vars_files:
+  - conf_internet.yml
+
+  roles:
+  - packages
+  - unbound
+  - squid
+
+- name: gateway_segment
+  hosts: gateway
+  become: yes
+  vars_files:
+  - conf_gateway.yml
+
+  roles:
+  - dnf
+  - resolv
+  - packages
+  - unbound
+  - squid
+
+- name: lgwan_segment
+  hosts: lgwan
+  become: yes
+  vars_files:
+  - conf_lgwan.yml
+
+  roles:
+  - dnf
+  - resolv
+  - packages
+

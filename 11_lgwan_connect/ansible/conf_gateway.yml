@@ -1,0 +1,18 @@
+packages:
+  list:
+    - unbound
+    - squid
+
+unbound:
+  file: gateway_unbound.conf.j2
+
+squid:
+  file: gateway_squid.conf.j2
+  whitelist: whitelist.j2
+
+dnf:
+  file: gateway_dnf.conf.j2
+
+resolv:
+  file: gateway_resolv.conf.j2
+

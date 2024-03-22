@@ -8,20 +8,16 @@
     allow_unauthenticated: yes
     autoremove: yes
 
-- name: Add an Apt signing key
-  apt_key:
-    url: "{{ item.name }}"
-    keyring: "{{ item.groups }}"
-    state: present
-  loop:
-    - { name: 'https://apt.releases.hashicorp.com/gpg', groups: '/usr/share/keyrings/hashicorp-archive-keyring.gpg' }
+- name: Install Terraform Key
+  shell: "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg"
+  become: true
 
-- name: Add Ubuntu repository to source list
-  apt_repository:
+- name: repository is added
+  ansible.builtin.apt_repository:
     repo: "{{ item }}"
     state: present
   with_items:
-    - deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main
+    - deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main
 
 - name: Install Packages
   apt:

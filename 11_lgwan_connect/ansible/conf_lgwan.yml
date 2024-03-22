@@ -1,0 +1,6 @@
+dnf:
+  file: lgwan_dnf.conf.j2
+
+resolv:
+  file: lgwan_resolv.conf.j2
+
