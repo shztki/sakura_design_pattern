@@ -70,7 +70,7 @@ variable "server01" {
     os               = "rocky9" # miracle8/9, alma8/9, rocky8/9, ubuntu20/22
     count            = 1
     core             = 1
-    memory           = 1
+    memory           = 2
     commitment       = "standard" # "dedicatedcpu"
     interface_driver = "virtio"
     name             = "internet"
@@ -85,7 +85,7 @@ variable "server02" {
     os               = "rocky9" # miracle8/9, alma8/9, rocky8/9, ubuntu20/22
     count            = 1
     core             = 1
-    memory           = 1
+    memory           = 2
     commitment       = "standard" # "dedicatedcpu"
     interface_driver = "virtio"
     name             = "gateway"
@@ -100,7 +100,7 @@ variable "server03" {
     os               = "rocky9" # miracle8/9, alma8/9, rocky8/9, ubuntu20/22
     count            = 1
     core             = 1
-    memory           = 1
+    memory           = 2
     commitment       = "standard" # "dedicatedcpu"
     interface_driver = "virtio"
     name             = "lgwan"
