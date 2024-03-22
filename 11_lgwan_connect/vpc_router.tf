@@ -70,16 +70,16 @@ resource "sakuracloud_vpc_router" "vpc_router01" {
       logging             = true
       description         = "desc"
     }
-    expression {
-      protocol            = "tcp"
-      source_network      = var.office_cidr
-      source_port         = ""
-      destination_network = var.switch01["name"]
-      destination_port    = "22"
-      allow               = true
-      logging             = true
-      description         = "desc"
-    }
+    #expression {
+    #  protocol            = "tcp"
+    #  source_network      = var.office_cidr
+    #  source_port         = ""
+    #  destination_network = var.switch01["name"]
+    #  destination_port    = "22"
+    #  allow               = true
+    #  logging             = true
+    #  description         = "desc"
+    #}
     expression {
       protocol            = "ip"
       source_network      = ""

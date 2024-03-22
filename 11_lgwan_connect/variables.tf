@@ -1,6 +1,6 @@
 # environmental variables
-variable "office_cidr" {}
 variable "default_password" {}
+#variable "office_cidr" {}
 #variable "service_local_router_id" {}
 #variable "service_local_router_key" {}
 
