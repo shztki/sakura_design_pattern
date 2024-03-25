@@ -1,5 +1,4 @@
-{% raw %}
-#
+{% raw %}#
 # Recommended minimum configuration:
 #
 
@@ -55,7 +54,7 @@ http_access deny manager
 # Example rule allowing access from your local networks.
 # Adapt localnet in the ACL section to list your (internal) IP networks
 # from where browsing should be allowed
-http_access deny !localnet
+http_access allow localnet
 http_access allow localhost
 
 # And finally deny all other access to this proxy

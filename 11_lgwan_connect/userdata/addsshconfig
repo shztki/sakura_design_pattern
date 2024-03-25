@@ -2,6 +2,8 @@ Host internet
     Hostname IPADDRESS
     Port 10022
     User sakura-user
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
     IdentityFile ~/work/sakura_design_pattern/11_lgwan_connect/.ssh/sshkey
     ControlMaster auto
     ControlPath ~/.ssh/cp-%r@%h:%p
@@ -10,11 +12,15 @@ Host internet
 Host gateway
     Hostname 192.168.4.10
     User sakura-user
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
     IdentityFile ~/work/sakura_design_pattern/11_lgwan_connect/.ssh/sshkey
     ProxyJump internet
 
 Host lgwan
     Hostname 192.168.6.2
     User sakura-user
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no
     IdentityFile ~/work/sakura_design_pattern/11_lgwan_connect/.ssh/sshkey
     ProxyJump gateway
