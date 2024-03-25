@@ -36,6 +36,9 @@ http_access deny !Safe_ports
 # Deny CONNECT to other than secure SSL ports
 http_access deny CONNECT !SSL_ports
 
+acl NOCACHE src all
+cache deny NOCACHE
+
 # Only allow cachemgr access from localhost
 http_access allow localhost manager
 http_access deny manager
@@ -52,8 +55,8 @@ http_access deny manager
 # Example rule allowing access from your local networks.
 # Adapt localnet in the ACL section to list your (internal) IP networks
 # from where browsing should be allowed
-#http_access allow localnet
-#http_access allow localhost
+http_access deny !localnet
+http_access allow localhost
 
 acl whitelist dstdomain "/etc/squid/whitelist"
 http_access allow whitelist
