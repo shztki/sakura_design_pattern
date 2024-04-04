@@ -26,7 +26,7 @@ $ make plan
 $ make apply ※通常は terraform apply だが、初回のみ SSH用鍵ファイルおよび .ssh/config 作成のため
 
 ★ローカルルータのピア接続実施のため、2回目の実行
-$ vim localrouter.tf ※ `# comment out after local_router01/02` とつけている設定箇所をコメントアウトして、ローカルルータ間のピア接続を行う(3箇所)
+$ vim localrouter.tf ※ `# comment out after local_router01/02` とつけている設定箇所のコメントを解除して、ローカルルータ間のピア接続を行う(3箇所)
 $ terraform apply ※2回目以降の実行時は、make apply は使わないこと。でないと、~/.ssh/config に同じ内容が追記されていきます
 
 ★各アプリケーションの設定のため、Ansible 実行
