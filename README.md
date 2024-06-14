@@ -264,20 +264,6 @@ export TF_TOKEN_app_terraform_io=`pass terraform/cloud/token`
 ```
 
 * 上記について、同様のことを AWS の S3 に置き場所となるバケットを作りつつ、 DynamoDB を使ってロック機能を実装することで、実現する方法もあります。  
-またロック不要であれば、さくらのオブジェクトストレージに作成したバケットを指定して、保存することも可能です。  
-その場合は main.tf の以下部分をコメントアウトして、バケット名やキー名は変更して、ご利用ください。
-```
-  #backend "s3" {
-  #  bucket                      = "bucket-name"
-  #  key                         = "01_design_pattern/terraform.tfstate"
-  #  region                      = "jp-north-1"
-  #  endpoint                    = "https://s3.isk01.sakurastorage.jp"
-  #  skip_region_validation      = true
-  #  skip_credentials_validation = true
-  #  skip_metadata_api_check     = true
-  #  force_path_style            = true
-  #}
-```
 
 * 余談ですが、エディタには Visual Studio Code をおすすめします。  
 https://code.visualstudio.com/  

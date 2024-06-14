@@ -15,16 +15,6 @@ module "label" {
 terraform {
   required_version = "~> 1"
   #cloud {}
-  #backend "s3" {
-  #  bucket                      = "bucket-name"
-  #  key                         = "04_design_pattern/terraform.tfstate"
-  #  region                      = "jp-north-1"
-  #  endpoint                    = "https://s3.isk01.sakurastorage.jp"
-  #  skip_region_validation      = true
-  #  skip_credentials_validation = true
-  #  skip_metadata_api_check     = true
-  #  force_path_style            = true
-  #}
 
   required_providers {
     sakuracloud = {
